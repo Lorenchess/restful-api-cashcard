@@ -1,6 +1,7 @@
 package com.example.cashcard.controller;
 
 import com.example.cashcard.dto.CashCardDTO;
+import com.example.cashcard.exception.CashCardNotFoundException;
 import com.example.cashcard.repository.CashCardRepository;
 import com.example.cashcard.service.CashCardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class CashCardController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CashCardDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<CashCardDTO> findById(@PathVariable Long id) throws CashCardNotFoundException {
         CashCardDTO cashCardDTO = service.findCashCardById(id);
 
         return ResponseEntity.ok(cashCardDTO);
