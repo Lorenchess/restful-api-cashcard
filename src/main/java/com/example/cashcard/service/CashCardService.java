@@ -6,4 +6,6 @@ import com.example.cashcard.exception.CashCardNotFoundException;
 public interface CashCardService {
 
     CashCardDTO findCashCardById(Long id) throws CashCardNotFoundException;
+
+    CashCardDTO saveCashCard(CashCardDTO cashCardDTO);
 }

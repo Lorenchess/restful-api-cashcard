@@ -1,21 +1,18 @@
 package com.example.cashcard.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
 @Builder
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CashCard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "CASHCARD_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cashCardId;
 
     private Double amount;

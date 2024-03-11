@@ -6,12 +6,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SimpleMapper {
-    public static CashCardDTO entityToDTO(CashCard cashCard) {
-        return new CashCardDTO(cashCard.getCashCardId(), cashCard.getAmount());
+    public CashCardDTO entityToDTO(CashCard cashCard) {
+        return CashCardDTO.builder()
+                          .cashCardId(cashCard.getCashCardId())
+                          .amount(cashCard.getAmount())
+                          .build();
     }
 
-    public static CashCard dtoToEntity(CashCardDTO cashCardDTO) {
-        return new CashCard(cashCardDTO.getCashCardId(), cashCardDTO.getAmount());
+    public CashCard dtoToEntity(CashCardDTO cashCardDTO) {
+        return CashCard.builder()
+                       .cashCardId(cashCardDTO.getCashCardId())
+                       .amount(cashCardDTO.getAmount())
+                       .build();
     }
 
 }
