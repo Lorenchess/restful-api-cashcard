@@ -60,6 +60,16 @@ class CashcardApplicationTests {
 		CashCard newCashCard = new CashCard(2L, 250.00);
 		ResponseEntity<Void> createResponse = restTemplate.postForEntity("/cashcards", newCashCard, Void.class);
 		assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
+		URI location = createResponse.getHeaders().getLocation();
+		ResponseEntity<String> response = restTemplate.getForEntity(location, String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+	}
+
+	@Test
+	void shouldReturnAllCashCardsWhenListIsRequested() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/cashcards", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
 }

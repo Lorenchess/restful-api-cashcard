@@ -5,11 +5,14 @@ import com.example.cashcard.exception.CashCardNotFoundException;
 import com.example.cashcard.repository.CashCardRepository;
 import com.example.cashcard.service.CashCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/cashcards")
@@ -35,6 +38,12 @@ public class CashCardController {
     public ResponseEntity<Void> createCashCard(@RequestBody CashCardDTO cashCardDTO){
         CashCardDTO cardDTO = service.saveCashCard(cashCardDTO);
         return entityWithLocation(cardDTO.getCashCardId());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CashCardDTO>> getAllCashCards(Pageable pageable) {
+        List<CashCardDTO> allCashCards = service.findAllCashCards(pageable);
+        return ResponseEntity.ok(allCashCards);
     }
 
     private ResponseEntity<Void> entityWithLocation(Object resourceId) {

@@ -6,7 +6,13 @@ import com.example.cashcard.exception.CashCardNotFoundException;
 import com.example.cashcard.mapper.SimpleMapper;
 import com.example.cashcard.repository.CashCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+
+import java.util.List;
 
 @Service
 public class CashCardServiceImp implements CashCardService{
@@ -36,6 +42,16 @@ public class CashCardServiceImp implements CashCardService{
         CashCard cashCard = mapper.dtoToEntity(cashCardDTO);
         CashCard savedCashCard = repository.save(cashCard);
         return mapper.entityToDTO(savedCashCard);
+    }
+
+    @Override
+    public List<CashCardDTO> findAllCashCards(Pageable pageable) {
+        Page<CashCard> cashCardPage = repository.findAll(
+                PageRequest.of(
+                        pageable.getPageNumber(),
+                        pageable.getPageSize()
+                ));
+        return cashCardPage.stream().map(mapper::entityToDTO).toList();
     }
 
 

@@ -1,0 +1,5 @@
+[
+  {"cashCardId": 99, "amount": 123.45 },
+  {"cashCardId": 100, "amount": 1.00 },
+  {"cashCardId": 101, "amount": 150.00 }
+]
