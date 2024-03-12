@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -46,11 +47,12 @@ public class CashCardServiceImp implements CashCardService{
 
     @Override
     public List<CashCardDTO> findAllCashCards(Pageable pageable) {
-        Page<CashCard> cashCardPage = repository.findAll(
+        List<CashCard> cashCardPage = repository.findAll(
                 PageRequest.of(
                         pageable.getPageNumber(),
-                        pageable.getPageSize()
-                ));
+                        pageable.getPageSize(),
+                        pageable.getSortOr(Sort.by(Sort.Direction.ASC, "amount"))
+                )).getContent();
         return cashCardPage.stream().map(mapper::entityToDTO).toList();
     }
 

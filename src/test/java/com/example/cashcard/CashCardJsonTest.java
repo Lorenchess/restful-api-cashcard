@@ -78,4 +78,6 @@ public class CashCardJsonTest {
          """;
         assertThat(jsonList.parse(expected)).isEqualTo(cashCards);
     }
+
+
 }

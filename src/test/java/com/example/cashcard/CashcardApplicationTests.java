@@ -3,6 +3,7 @@ package com.example.cashcard;
 import com.example.cashcard.entity.CashCard;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import net.minidev.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,6 +71,44 @@ class CashcardApplicationTests {
 	void shouldReturnAllCashCardsWhenListIsRequested() {
 		ResponseEntity<String> response = restTemplate.getForEntity("/cashcards", String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		DocumentContext documentContext = JsonPath.parse(response.getBody());
+		int cashCardCount = documentContext.read("$.length()");
+		assertThat(cashCardCount).isEqualTo(3);
+
+		JSONArray ids = documentContext.read("$..cashCardId");
+		assertThat(ids).containsExactlyInAnyOrder(99, 100, 101);
+
+		JSONArray amounts = documentContext.read("$..amount");
+		assertThat(amounts).containsExactlyInAnyOrder(123.45, 1.0, 150.00);
+
+	}
+
+	@Test
+	void shouldReturnAPageOfCashCards() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/cashcards?page=0&size=1&sort=amount,desc", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		DocumentContext documentContext = JsonPath.parse(response.getBody());
+		JSONArray page = documentContext.read("$[*]");
+		assertThat(page.size()).isEqualTo(1);
+
+		double amount = documentContext.read("$[0].amount");
+		assertThat(amount).isEqualTo(150.00);
+
+	}
+
+	@Test
+	void shouldReturnASortedPageOfCashCardsWithNoParametersAndUseDefaultValues() {
+		ResponseEntity<String> response = restTemplate.getForEntity("/cashcards", String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		DocumentContext documentContext = JsonPath.parse(response.getBody());
+		JSONArray page = documentContext.read("$[*]");
+		assertThat(page.size()).isEqualTo(3);
+
+		JSONArray amounts = documentContext.read("$..amount");
+		assertThat(amounts).containsExactly(1.00, 123.45, 150.00);
 	}
 
 }
