@@ -3,6 +3,7 @@ package com.example.cashcard.service;
 import com.example.cashcard.dto.CashCardDTO;
 import com.example.cashcard.entity.CashCard;
 import com.example.cashcard.exception.CashCardNotFoundException;
+import com.example.cashcard.exception.PrincipalForbiddenException;
 import com.example.cashcard.mapper.SimpleMapper;
 import com.example.cashcard.repository.CashCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +39,15 @@ public class CashCardServiceImp implements CashCardService{
     }
 
     @Override
-    public CashCardDTO saveCashCard(CashCardDTO cashCardDTO) {
-        CashCard cashCard = mapper.dtoToEntity(cashCardDTO);
-        CashCard savedCashCard = repository.save(cashCard);
-        return mapper.entityToDTO(savedCashCard);
+    public CashCardDTO saveCashCard(CashCardDTO cashCardDTO, Principal owner) throws PrincipalForbiddenException {
+        if (owner.getName().equals(cashCardDTO.getOwner())){
+            CashCard cashCard = mapper.dtoToEntity(cashCardDTO);
+            CashCard savedCashCard = repository.save(cashCard);
+            return mapper.entityToDTO(savedCashCard);
+        } else {
+            throw new PrincipalForbiddenException("You are not authorized to perform this action.");
+        }
+
     }
 
     @Override

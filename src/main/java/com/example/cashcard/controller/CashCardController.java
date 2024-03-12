@@ -2,8 +2,10 @@ package com.example.cashcard.controller;
 
 import com.example.cashcard.dto.CashCardDTO;
 import com.example.cashcard.exception.CashCardNotFoundException;
+import com.example.cashcard.exception.PrincipalForbiddenException;
 import com.example.cashcard.repository.CashCardRepository;
 import com.example.cashcard.service.CashCardService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +38,8 @@ public class CashCardController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createCashCard(@RequestBody CashCardDTO cashCardDTO){
-        CashCardDTO cardDTO = service.saveCashCard(cashCardDTO);
+    public ResponseEntity<Void> createCashCard(@RequestBody @Valid CashCardDTO cashCardDTO, Principal owner) throws PrincipalForbiddenException {
+        CashCardDTO cardDTO = service.saveCashCard(cashCardDTO, owner);
         return entityWithLocation(cardDTO.getCashCardId());
     }
 

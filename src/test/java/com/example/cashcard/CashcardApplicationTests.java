@@ -16,6 +16,9 @@ import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Integration tests
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CashcardApplicationTests {
 
@@ -60,10 +63,20 @@ class CashcardApplicationTests {
 	@DirtiesContext
 	void shouldCreateANewCashCardWithLocation() {
 		String url = "/cashcards";
-		CashCard cashCard = new CashCard(1L, 123.45, "lorenchess");
+		CashCard cashCard = new CashCard(null, 123.45, "lorenchess");
 		URI newCashCardLocation = restTemplate.withBasicAuth("lorenchess", "abc123").postForLocation(url, cashCard);
 		CashCard retrievedCashCard = restTemplate.withBasicAuth("lorenchess", "abc123").getForObject(newCashCardLocation, CashCard.class);
 		assertThat(retrievedCashCard.getAmount()).isEqualTo(cashCard.getAmount());
+	}
+
+	@Test
+	@DirtiesContext
+	void shouldReturnNullLocationIfPassingOwnerNull() {
+		String url = "/cashcards";
+		CashCard cashCard = new CashCard(null, 123.45, null);
+		URI newCashCardLocation = restTemplate.withBasicAuth("lorenchess", "abc123").postForLocation(url, cashCard);
+		assertThat(newCashCardLocation).isNull();
+
 	}
 
 	@Test

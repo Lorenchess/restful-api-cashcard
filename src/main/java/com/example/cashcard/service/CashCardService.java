@@ -2,6 +2,7 @@ package com.example.cashcard.service;
 
 import com.example.cashcard.dto.CashCardDTO;
 import com.example.cashcard.exception.CashCardNotFoundException;
+import com.example.cashcard.exception.PrincipalForbiddenException;
 import org.springframework.data.domain.Pageable;
 
 import java.security.Principal;
@@ -11,7 +12,7 @@ public interface CashCardService {
 
     CashCardDTO findCashCardByIdAndOwner(Long id, Principal owner) throws CashCardNotFoundException;
 
-    CashCardDTO saveCashCard(CashCardDTO cashCardDTO);
+    CashCardDTO saveCashCard(CashCardDTO cashCardDTO, Principal owner) throws PrincipalForbiddenException;
 
     List<CashCardDTO> findAllCashCards(Principal owner, Pageable pageable);
 }
