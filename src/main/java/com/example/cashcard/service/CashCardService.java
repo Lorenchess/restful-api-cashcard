@@ -4,13 +4,14 @@ import com.example.cashcard.dto.CashCardDTO;
 import com.example.cashcard.exception.CashCardNotFoundException;
 import org.springframework.data.domain.Pageable;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface CashCardService {
 
-    CashCardDTO findCashCardById(Long id) throws CashCardNotFoundException;
+    CashCardDTO findCashCardByIdAndOwner(Long id, Principal owner) throws CashCardNotFoundException;
 
     CashCardDTO saveCashCard(CashCardDTO cashCardDTO);
 
-    List<CashCardDTO> findAllCashCards(Pageable pageable);
+    List<CashCardDTO> findAllCashCards(Principal owner, Pageable pageable);
 }

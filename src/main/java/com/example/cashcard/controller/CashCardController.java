@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -27,8 +28,8 @@ public class CashCardController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CashCardDTO> findById(@PathVariable Long id) throws CashCardNotFoundException {
-        CashCardDTO cashCardDTO = service.findCashCardById(id);
+    public ResponseEntity<CashCardDTO> findById(@PathVariable Long id, Principal owner) throws CashCardNotFoundException {
+        CashCardDTO cashCardDTO = service.findCashCardByIdAndOwner(id, owner);
 
         return ResponseEntity.ok(cashCardDTO);
 
@@ -41,8 +42,8 @@ public class CashCardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CashCardDTO>> getAllCashCards(Pageable pageable) {
-        List<CashCardDTO> allCashCards = service.findAllCashCards(pageable);
+    public ResponseEntity<List<CashCardDTO>> getAllCashCards(Pageable pageable, Principal owner) {
+        List<CashCardDTO> allCashCards = service.findAllCashCards(owner, pageable);
         return ResponseEntity.ok(allCashCards);
     }
 

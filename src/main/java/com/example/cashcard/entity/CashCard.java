@@ -17,4 +17,6 @@ public class CashCard {
     private Long cashCardId;
 
     private Double amount;
+
+    private String owner;
 }

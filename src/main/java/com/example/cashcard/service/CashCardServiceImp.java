@@ -6,13 +6,12 @@ import com.example.cashcard.exception.CashCardNotFoundException;
 import com.example.cashcard.mapper.SimpleMapper;
 import com.example.cashcard.repository.CashCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -28,8 +27,8 @@ public class CashCardServiceImp implements CashCardService{
     }
 
     @Override
-    public CashCardDTO findCashCardById(Long id) throws CashCardNotFoundException {
-        CashCard cashCard = repository.findByCashCardId(id);
+    public CashCardDTO findCashCardByIdAndOwner(Long id, Principal owner) throws CashCardNotFoundException {
+        CashCard cashCard = repository.findByCashCardIdAndOwner(id, owner.getName());
 
         if(cashCard != null){
             return mapper.entityToDTO(cashCard);
@@ -46,8 +45,8 @@ public class CashCardServiceImp implements CashCardService{
     }
 
     @Override
-    public List<CashCardDTO> findAllCashCards(Pageable pageable) {
-        List<CashCard> cashCardPage = repository.findAll(
+    public List<CashCardDTO> findAllCashCards(Principal owner, Pageable pageable) {
+        List<CashCard> cashCardPage = repository.findByOwner( owner.getName(),
                 PageRequest.of(
                         pageable.getPageNumber(),
                         pageable.getPageSize(),

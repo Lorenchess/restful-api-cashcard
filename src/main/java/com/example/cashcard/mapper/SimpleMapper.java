@@ -10,6 +10,7 @@ public class SimpleMapper {
         return CashCardDTO.builder()
                           .cashCardId(cashCard.getCashCardId())
                           .amount(cashCard.getAmount())
+                          .owner(cashCard.getOwner())
                           .build();
     }
 
@@ -17,6 +18,7 @@ public class SimpleMapper {
         return CashCard.builder()
                        .cashCardId(cashCardDTO.getCashCardId())
                        .amount(cashCardDTO.getAmount())
+                       .owner(cashCardDTO.getOwner())
                        .build();
     }
 
