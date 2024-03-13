@@ -33,13 +33,17 @@ public class SecurityConfig {
     UserDetailsService testOnlyUsers(PasswordEncoder passwordEncoder) {
         User.UserBuilder users = User.builder();
         UserDetails lorenchess = users.username("lorenchess")
-                                       .password(passwordEncoder.encode("abc123"))
+                                       .password(passwordEncoder.encode("loren123"))
                                        .roles("CARD-OWNER")
                                        .build();
 
+        UserDetails isaloren = users.username("isaloren")
+                                        .password(passwordEncoder.encode("isa123"))
+                                        .roles("CARD-OWNER").build();
+
         UserDetails leoOwnsNoCards = users.username("leo")
-                                        .password(passwordEncoder.encode("leo123"))
-                                        .roles("NO-OWNER").build();
-        return new InMemoryUserDetailsManager(lorenchess, leoOwnsNoCards);
+                .password(passwordEncoder.encode("leo123"))
+                .roles("NO-OWNER").build();
+        return new InMemoryUserDetailsManager(lorenchess, isaloren, leoOwnsNoCards);
     }
 }

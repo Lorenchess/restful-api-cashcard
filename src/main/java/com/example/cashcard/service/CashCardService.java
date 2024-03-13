@@ -18,4 +18,5 @@ public interface CashCardService {
 
     void updateCashCard(Long requestId, CashCardDTO cashCardDTO, Principal principal) throws PrincipalForbiddenException;
 
+    void deleteCard(Long requestId, Principal principal) throws CashCardNotFoundException, PrincipalForbiddenException;
 }

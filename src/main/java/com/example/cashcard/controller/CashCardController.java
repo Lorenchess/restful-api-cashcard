@@ -3,7 +3,6 @@ package com.example.cashcard.controller;
 import com.example.cashcard.dto.CashCardDTO;
 import com.example.cashcard.exception.CashCardNotFoundException;
 import com.example.cashcard.exception.PrincipalForbiddenException;
-import com.example.cashcard.repository.CashCardRepository;
 import com.example.cashcard.service.CashCardService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +54,12 @@ public class CashCardController {
                                             Principal principal) throws PrincipalForbiddenException {
        service.updateCashCard(requestId, cashCardDTO, principal);
        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{requestId}")
+    public ResponseEntity<Void> deleteCashCard(@PathVariable Long requestId, Principal principal) throws PrincipalForbiddenException, CashCardNotFoundException {
+        service.deleteCard(requestId, principal);
+        return ResponseEntity.noContent().build();
     }
 
     private ResponseEntity<Void> entityWithLocation(Object resourceId) {

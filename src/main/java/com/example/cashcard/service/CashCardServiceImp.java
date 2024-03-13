@@ -7,10 +7,12 @@ import com.example.cashcard.exception.PrincipalForbiddenException;
 import com.example.cashcard.mapper.SimpleMapper;
 import com.example.cashcard.repository.CashCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.security.Principal;
 import java.util.List;
@@ -76,6 +78,22 @@ public class CashCardServiceImp implements CashCardService{
             throw new PrincipalForbiddenException("You are not authorized to perform this update.");
         }
 
+    }
+
+    @Override
+    public void deleteCard(Long requestId, Principal principal) throws CashCardNotFoundException, PrincipalForbiddenException {
+            CashCard cashCardIdAndOwner = repository.findByCashCardIdAndOwner(requestId, principal.getName());
+
+            if (cashCardIdAndOwner != null) {
+                if (principal.getName().equals(cashCardIdAndOwner.getOwner())){
+                    repository.delete(cashCardIdAndOwner);
+                } else {
+                    throw new PrincipalForbiddenException("You are not authorized to perform this action.");
+                }
+
+            } else {
+                throw new CashCardNotFoundException(String.format("CashCard not found for id: %s ", requestId));
+            }
 
 
     }
