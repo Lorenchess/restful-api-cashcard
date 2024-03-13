@@ -44,4 +44,5 @@ The application provides custom exception handling for the following scenarios:
 CashCardNotFoundException: When a requested cash card is not found in the database.
 ForbiddenActionException: When a user attempts to perform an action on a cash card they do not own.
 Database Schema
-The H2 database schema is automatically initialized at startup using schema.sql, and test data is populated using data.sql.   
+The H2 database schema is automatically initialized at startup using schema.sql, and test data is populated using data.sql.  
+The application extends the practice project for the Spring Learning Path that I am taking as preparation for taking the VMware Spring and Spring Boot certification. https://spring.academy/courses/building-a-rest-api-with-spring-boot
