@@ -39,8 +39,8 @@ public class CashCardServiceImp implements CashCardService{
     }
 
     @Override
-    public CashCardDTO saveCashCard(CashCardDTO cashCardDTO, Principal owner) throws PrincipalForbiddenException {
-        if (owner.getName().equals(cashCardDTO.getOwner())){
+    public CashCardDTO saveCashCard(CashCardDTO cashCardDTO, Principal principal) throws PrincipalForbiddenException {
+        if (principal.getName().equals(cashCardDTO.getOwner())){
             CashCard cashCard = mapper.dtoToEntity(cashCardDTO);
             CashCard savedCashCard = repository.save(cashCard);
             return mapper.entityToDTO(savedCashCard);
@@ -51,14 +51,33 @@ public class CashCardServiceImp implements CashCardService{
     }
 
     @Override
-    public List<CashCardDTO> findAllCashCards(Principal owner, Pageable pageable) {
-        List<CashCard> cashCardPage = repository.findByOwner( owner.getName(),
+    public List<CashCardDTO> findAllCashCards(Principal principal, Pageable pageable) {
+        List<CashCard> cashCardPage = repository.findByOwner( principal.getName(),
                 PageRequest.of(
                         pageable.getPageNumber(),
                         pageable.getPageSize(),
                         pageable.getSortOr(Sort.by(Sort.Direction.ASC, "amount"))
                 )).getContent();
         return cashCardPage.stream().map(mapper::entityToDTO).toList();
+    }
+
+    @Override
+    public void updateCashCard(Long requestId, CashCardDTO cashCardDTO, Principal principal) throws PrincipalForbiddenException {
+        if(principal.getName().equals(cashCardDTO.getOwner())) {
+            CashCard cashCard = mapper.dtoToEntity(cashCardDTO);
+            CashCard byCashCardIdAndOwner = repository.findByCashCardIdAndOwner(requestId, cashCard.getOwner());
+            CashCard updatedCashCard = CashCard.builder()
+                    .cashCardId(byCashCardIdAndOwner.getCashCardId())
+                    .amount(cashCard.getAmount())
+                    .owner(cashCard.getOwner())
+                    .build();
+            repository.save(updatedCashCard);
+        } else {
+            throw new PrincipalForbiddenException("You are not authorized to perform this update.");
+        }
+
+
+
     }
 
 

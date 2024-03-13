@@ -15,4 +15,7 @@ public interface CashCardService {
     CashCardDTO saveCashCard(CashCardDTO cashCardDTO, Principal owner) throws PrincipalForbiddenException;
 
     List<CashCardDTO> findAllCashCards(Principal owner, Pageable pageable);
+
+    void updateCashCard(Long requestId, CashCardDTO cashCardDTO, Principal principal) throws PrincipalForbiddenException;
+
 }

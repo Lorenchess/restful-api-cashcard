@@ -49,6 +49,14 @@ public class CashCardController {
         return ResponseEntity.ok(allCashCards);
     }
 
+    @PutMapping("/{requestId}")
+    public ResponseEntity<Void> putCashCard(@PathVariable Long requestId,
+                                            @Valid @RequestBody CashCardDTO cashCardDTO,
+                                            Principal principal) throws PrincipalForbiddenException {
+       service.updateCashCard(requestId, cashCardDTO, principal);
+       return ResponseEntity.noContent().build();
+    }
+
     private ResponseEntity<Void> entityWithLocation(Object resourceId) {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequestUri()
